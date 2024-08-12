@@ -17,12 +17,13 @@ const Product = () => {
 
     const [products, setProducts] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [total, setTotal] = useState(0)
     const [ofset, setOfset] = useState(1)
 
     useEffect(() => {
         axios
             .get(`${API_URL}/products/category-list`)
-            .then(res => setCategories(res.data ))
+            .then(res => setCategories(res.data))
             .catch(err => console.log(err))
     }, [])
     console.log(selectCategory);
@@ -35,9 +36,12 @@ const Product = () => {
                     limit: 4 * ofset
                 }
             })
-            .then(res => setProducts(res.data.products))
+            .then(res => {
+                setTotal(res.data.total)
+                setProducts(res.data.products)
+            })
             .catch(err => console.log(err))
-            .finally(()=> setLoading(false))
+            .finally(() => setLoading(false))
 
     }, [ofset, selectCategory])
 
@@ -73,22 +77,27 @@ const Product = () => {
         <>
             <div className='mt-16'>
                 <div className="container">
-                       
+
                     <div className='flex  items-end mb-8'>
                         <h2 className='font-extrabold text-4xl'>Товары в наличии</h2>
                         <p className=''>Все категории -</p>
                     </div>
                     <select onChange={e => setSelectCategory(e.target.value)} name="" id="">
-                            <option value="">All</option>
-                            {categoryItems}
-                        </select>
+                        <option value="">All</option>
+                        {categoryItems}
+                    </select>
                     <div className='flex  justify-between flex-wrap'>
                         {productItem}
                         <div>
-                            {loading && <h2 className='text-yellow-200'>Loading..</h2> }
+                            {loading && <h2 className='text-yellow-200'>Loading..</h2>}
                         </div>
                     </div>
-                    <button onClick={()=> setOfset(p=> p + 1)} className='hover:cursor-pointer hover:text-white block mx-auto rounded-[14px] bg-[yellowgreen] py-3 px-4'>See more</button>
+                    {
+                        4 * offset <= total ?
+                        <button onClick={() => setOfset(p => p + 1)} className='hover:cursor-pointer hover:text-white block mx-auto rounded-[14px] bg-[yellowgreen] py-3 px-4'>See more</button>
+                        :
+                        <></>
+                    }
                 </div>
 
             </div>
