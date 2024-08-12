@@ -11,7 +11,8 @@
   "dependencies": {
     "axios": "^1.7.3",
     "line-clamp": "^1.0.0",
-    "preact": "^10.22.1"
+    "preact": "^10.22.1",
+    "react-loading": "^2.0.3"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.3",

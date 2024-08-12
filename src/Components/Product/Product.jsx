@@ -20,6 +20,14 @@ const Product = () => {
     const [total, setTotal] = useState(0)
     const [ofset, setOfset] = useState(1)
 
+    const skeletonItem = new Array(4).fill("").map((_, inx) => (
+        <div className='w-80 flex flex-col items-end gap-[10px] '> <div className='w-full h-[300px] rounded-[15px] bg-[#ddd]'></div>
+            <div className='w-[75%] bg-[#ddd] rounded-[15px] h-[50px] justify-end'></div>
+            <div className='w-[50%] bg-[#ddd] rounded-[15px] h-[50px]'></div>
+        </div>
+    ))
+
+
     useEffect(() => {
         axios
             .get(`${API_URL}/products/category-list`)
@@ -82,21 +90,21 @@ const Product = () => {
                         <h2 className='font-extrabold text-4xl'>Товары в наличии</h2>
                         <p className=''>Все категории -</p>
                     </div>
-                    <select onChange={e => setSelectCategory(e.target.value)} name="" id="">
+                    <select className='cursor-pointer  outline-none' onChange={e => setSelectCategory(e.target.value)} name="" id="">
                         <option value="">All</option>
                         {categoryItems}
                     </select>
                     <div className='flex  justify-between flex-wrap'>
                         {productItem}
-                        <div>
-                            {loading && <h2 className='text-yellow-200'>Loading..</h2>}
+                        <div className='flex gap-[55px] mt-[30px]'>
+                            {loading && skeletonItem}
                         </div>
                     </div>
                     {
                         4 * offset <= total ?
-                        <button onClick={() => setOfset(p => p + 1)} className='hover:cursor-pointer hover:text-white block mx-auto rounded-[14px] bg-[yellowgreen] py-3 px-4'>See more</button>
-                        :
-                        <></>
+                            <button onClick={() => setOfset(p => p + 1)} className='hover:cursor-pointer hover:text-white block mx-auto rounded-[14px] bg-[yellowgreen] py-3 px-4'>See more</button>
+                            :
+                            <></>
                     }
                 </div>
 
