@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import cart from '../img/cart.png'
 
+
+
 const API_URL = "https://dummyjson.com"
 
 
 const Product = () => {
     const [offset, setOffset] = useState(4)
-    console.log("Header render inside");
-
+    const [categories, setCategories] = useState(null)
+    const [selectCategory, setSelectCategory] = useState("")
     const handleClick = () => {
         setOffset((prev) => prev + 1)
     }
@@ -17,11 +19,18 @@ const Product = () => {
     const [loading, setLoading] = useState(false)
     const [ofset, setOfset] = useState(1)
 
+    useEffect(() => {
+        axios
+            .get(`${API_URL}/products/category-list`)
+            .then(res => setCategories(res.data ))
+            .catch(err => console.log(err))
+    }, [])
+    console.log(selectCategory);
 
     useEffect(() => {
         setLoading(true)
         axios
-            .get(`${API_URL}/products`, {
+            .get(`${API_URL}/products${selectCategory}`, {
                 params: {
                     limit: 4 * ofset
                 }
@@ -30,7 +39,7 @@ const Product = () => {
             .catch(err => console.log(err))
             .finally(()=> setLoading(false))
 
-    }, [ofset])
+    }, [ofset, selectCategory])
 
 
     console.log(products);
@@ -56,22 +65,32 @@ const Product = () => {
 
     ))
 
+    const categoryItems = categories?.map(category => (
+        <option key={category} value={`/category/${category}`}>{category}</option>
+    ))
+
     return (
         <>
             <div className='mt-16'>
                 <div className="container">
+                       
                     <div className='flex  items-end mb-8'>
                         <h2 className='font-extrabold text-4xl'>Товары в наличии</h2>
                         <p className=''>Все категории -</p>
                     </div>
+                    <select onChange={e => setSelectCategory(e.target.value)} name="" id="">
+                            <option value="">All</option>
+                            {categoryItems}
+                        </select>
                     <div className='flex  justify-between flex-wrap'>
                         {productItem}
                         <div>
                             {loading && <h2 className='text-yellow-200'>Loading..</h2> }
                         </div>
                     </div>
-                    <button onClick={()=> setOfset(p=> p + 1)} className='block mx-auto bg-[yellowgreen] py-5 px-4'>See more</button>
+                    <button onClick={()=> setOfset(p=> p + 1)} className='hover:cursor-pointer hover:text-white block mx-auto rounded-[14px] bg-[yellowgreen] py-3 px-4'>See more</button>
                 </div>
+
             </div>
         </>
     )

@@ -21,13 +21,16 @@ const Header = () => {
             <div className=''>
               <img src={logo} alt="" />
             </div>
-            <div className=''>
+            <div className='flex gap-4 items-center'>
               <ul className='flex gap-8 cursor-pointer '>
                 <li className=' hover:text-yellow-600	'>Каталог</li>
                 <li className=' hover:text-yellow-600	'>Доставка</li>
                 <li className=' hover:text-yellow-600	'>Условия</li>
                 <li className=' hover:text-yellow-600	'>Контакты</li>
               </ul>
+              <div>
+                <input className='outline-none	px-2' type="search"  placeholder='Search'/>
+              </div>
             </div>
             <div className='flex flex-col items-end'>
               <div className='flex gap-2'>
